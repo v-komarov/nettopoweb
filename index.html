@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <title>nettopo3d</title>
+     <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
+     <link href="css/local.css" type="text/css" rel="stylesheet">
+     <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+     <script type="text/javascript" src="js/bootstrap.js"></script>
+     <script type="text/javascript" src="js/action.js"></script>
+
+  </head>
+
+    <div class="container">
+
+       <h3 class="text-center">Топология агрегации</h3>
+
+       <div class="row">
+        <form class="form-inline">
+            <div class="form-group">
+              <label for=ip>ip адрес</label>
+              <input id="ip" type="text" class="form-control form-control-sm">
+            </div>
+          <button id="getdata" type="button" class="btn btn-primary btn-sm">Запрос</button>
+        </form>
+       </div>
+
+       <aggr>
+           <h3>Агрегация (<ag></ag>)</h3>
+           <table id="aggr" class="table table-striped table-bordered table-sm">
+               <thead>
+                   <tr>
+                       <th>ip</th>
+                       <th>Имя</th>
+                       <th>Адрес</th>
+                       <th>Портов используется</th>
+                       <th>Портов в резерве</th>
+                       <th>Портов технологических</th>
+                   </tr>
+               </thead>
+               <tbody></tbody>
+           </table>
+       </aggr>
+
+       <segment>
+           <h3>Сегмент</h3>
+           <table id="segment" class="table table-striped table-bordered table-sm">
+               <thead>
+                   <tr>
+                       <th>ip</th>
+                       <th>Имя</th>
+                       <th>Адрес</th>
+                       <th>Портов используется</th>
+                       <th>Портов в резерве</th>
+                       <th>Портов технологических</th>
+                   </tr>
+               </thead>
+               <tbody></tbody>
+           </table>
+       </aggr>
+       </segment>
+
+    </div>
+
+
+  </body>
+</html>

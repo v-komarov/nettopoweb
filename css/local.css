@@ -1,0 +1,15 @@
+form label {
+    margin-right: 5px;
+}
+
+form button {
+    margin-left: 5px;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+table thead th {
+    background-color: #B0E0E6;
+}
