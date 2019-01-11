@@ -16,7 +16,7 @@ $(document).ready(function() {
 
 
 // Наполнение строк сегмента
-function SegmentRows(data) {
+function SegmentRows(data,searchip,ag) {
 
     // суммарные значения
     var sum_use = 0;
@@ -27,23 +27,28 @@ function SegmentRows(data) {
 
     if (data["ip"] != data["aggr"]) {
 
-
-        console.log(data);
-
         $.each(data["segment"]["nodes"], function( index, value ) {
             var ip = value["id"];
 
             // Получение данных по коммутаторам
             var jqxhr = $.getJSON(url_ports+ip,
+
                function(data) {
+
+                   // Окраска строк
+                   var classname = "class=\"rows\"";
+                   if (ip == searchip) { classname = "class=\"searchip\""; }
+                   if (ip == ag) { classname = "class=\"aggr\""; }
+
                    if (data.length != 0) {
 
                        sum_use += data[0]['port_use'];
                        sum_reserv += data[0]['port_reserv'];
                        sum_tech += data[0]['port_tech'];
 
+
                        // Наполнение таблицы данными
-                       var t = "<tr>"
+                       var t = "<tr "+classname+" >"
                        +"<td>"+data[0]['ip']+"</td>"
                        +"<td>"+data[0]['sysname']+"</td>"
                        +"<td>"+data[0]['address']+"</td>"
@@ -52,24 +57,37 @@ function SegmentRows(data) {
                        +"<td>"+data[0]['port_tech']+"</td>"
                        +"</tr>";
 
-                       $("table#segment tbody").append(t);
+                   }
 
+                   // Если данных по данному ip в инвентори нет
+                   else {
 
-                       // Итоговые значение
-                       var ts = "<tr id=sum>"
+                       // Наполнение таблицы данными
+                       var t = "<tr "+classname+" >"
+                       +"<td>"+ip+"</td>"
                        +"<td></td>"
                        +"<td></td>"
                        +"<td></td>"
-                       +"<td>"+sum_use+"</td>"
-                       +"<td>"+sum_reserv+"</td>"
-                       +"<td>"+sum_tech+"</td>"
+                       +"<td></td>"
+                       +"<td></td>"
                        +"</tr>";
 
-                       $("table#segment tbody tr#sum").remove();
-                       $("table#segment tbody").append(ts);
-
-
                    }
+
+                   $("table#segment tbody").append(t);
+
+                   // Итоговые значение
+                   var ts = "<tr id=sum>"
+                   +"<td></td>"
+                   +"<td></td>"
+                   +"<td></td>"
+                   +"<td>"+sum_use+"</td>"
+                   +"<td>"+sum_reserv+"</td>"
+                   +"<td>"+sum_tech+"</td>"
+                   +"</tr>";
+
+                   $("table#segment tbody tr#sum").remove();
+                   $("table#segment tbody").append(ts);
 
                })
 
@@ -88,7 +106,7 @@ function SegmentRows(data) {
 
 
 // Наполнение строк агрегации
-function AggRows(data) {
+function AggRows(data,searchip,ag) {
 
     // Очистка ip агрегатора
     $("ag").text(data["aggr"]);
@@ -106,6 +124,13 @@ function AggRows(data) {
         // Получение данных по коммутаторам
         var jqxhr = $.getJSON(url_ports+ip,
            function(data) {
+
+               // Окраска строк
+               var classname = "class=\"rows\"";
+               if (ip == searchip) { classname = "class=\"searchip\""; }
+               if (ip == ag) { classname = "class=\"aggr\""; }
+
+
                if (data.length != 0) {
 
                    sum_use += data[0]['port_use'];
@@ -113,7 +138,7 @@ function AggRows(data) {
                    sum_tech += data[0]['port_tech'];
 
                    // Наполнение таблицы данными
-                   var t = "<tr>"
+                   var t = "<tr "+classname+" >"
                    +"<td>"+data[0]['ip']+"</td>"
                    +"<td>"+data[0]['sysname']+"</td>"
                    +"<td>"+data[0]['address']+"</td>"
@@ -122,24 +147,35 @@ function AggRows(data) {
                    +"<td>"+data[0]['port_tech']+"</td>"
                    +"</tr>";
 
-                   $("table#aggr tbody").append(t);
-
-
-                   // Итоговые значение
-                   var ts = "<tr id=sum>"
-                   +"<td></td>"
-                   +"<td></td>"
-                   +"<td></td>"
-                   +"<td>"+sum_use+"</td>"
-                   +"<td>"+sum_reserv+"</td>"
-                   +"<td>"+sum_tech+"</td>"
-                   +"</tr>";
-
-                   $("table#aggr tbody tr#sum").remove();
-                   $("table#aggr tbody").append(ts);
-
-
                }
+
+               // Если данных по данному ip в инвентори нет
+               else {
+                   // Наполнение таблицы данными
+                   var t = "<tr "+classname+" >"
+                   +"<td>"+ip+"</td>"
+                   +"<td></td>"
+                   +"<td></td>"
+                   +"<td></td>"
+                   +"<td></td>"
+                   +"<td></td>"
+                   +"</tr>";
+               }
+
+               $("table#aggr tbody").append(t);
+
+               // Итоговые значение
+               var ts = "<tr id=sum>"
+               +"<td></td>"
+               +"<td></td>"
+               +"<td></td>"
+               +"<td>"+sum_use+"</td>"
+               +"<td>"+sum_reserv+"</td>"
+               +"<td>"+sum_tech+"</td>"
+               +"</tr>";
+
+               $("table#aggr tbody tr#sum").remove();
+               $("table#aggr tbody").append(ts);
 
            })
 
@@ -158,8 +194,9 @@ function GetData(ip) {
            if (data["result"] == "ok") {
 
                // Агрегация список устройств
-               AggRows(data);
-               SegmentRows(data);
+               var aggr = data["aggr"]
+               AggRows(data,ip,aggr);
+               SegmentRows(data,ip,aggr);
            }
 
        })
