@@ -197,6 +197,14 @@ function GetData(ip) {
                var aggr = data["aggr"]
                AggRows(data,ip,aggr);
                SegmentRows(data,ip,aggr);
+
+
+
+               // Отрисовка сегмента
+               $("picture").empty();
+               if (data["picture"] != "") {
+                   $("picture").append($(data["picture"]));
+               }
            }
 
        })
